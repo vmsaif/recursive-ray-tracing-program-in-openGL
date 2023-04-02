@@ -1,7 +1,7 @@
 /*
 	Author: Saif Mahmud
 	Student ID: 3433058
-	Date : 4 / 01 / 2023
+	Date : 4 / 02 / 2023
 	Course: COMP 390
 	TME = 4
 	Program : 1
@@ -104,27 +104,33 @@ vector3 recursive_ray_tracing_algorithm(vector3 intersect, int currDepth) {
 
 	//Calculate local color	// the surface color of the local object
 	vector3 floorLocalColor = localColor(intersect, grey, floorNormal);
-	
+	vector3 wallLocalColor = localColor(intersect, lightRed, wallNormal);
+
+	vector3 colorToBeMixed = outputColor;
 	// base case - If termination condition is met; termination conditions: maximum recursive calls
 	if (currDepth > max_depth) {
 		outputColor = floorLocalColor;
 	} 
 	else if (intersect.z == 0 && intersect.x >= wallLimit1.x && intersect.x <= wallLimit4.x && intersect.y >= wallLimit1.y && intersect.y <= wallLimit2.y) {
 		// the main wall. 
-		outputColor = localColor(intersect, lightRed, wallNormal);
-	}	
+		outputColor = wallLocalColor;
+	}
 	else {
+		//If the object at the intersection point is reflective, Call Recursive Ray Tracer to get reflective color
+		vector3 returnedRay = recursive_ray_tracing_algorithm(intersect, currDepth + 1);
+
+		// determining which color to mix on the floor, is it red or gray.
 		vector3 sm = wall.intersect(intersect, intersect.add(reflect));
 		if ((sm.x >= wallLimit1.x) && (sm.x <= wallLimit4.x) && (sm.y >= wallLimit1.y) && (sm.y <= wallLimit2.y)) {
-			// test for inclusion of wall part
-			vector3 wallLocalColor = localColor(intersect, lightRed, wallNormal);
-			outputColor = floorLocalColor.scalar(local_coef).add(wallLocalColor.scalar(reflect_coef));
+			// test for inclusion of wall part on the floor
+			colorToBeMixed = wallLocalColor;
 		}
 		else {
-			//If the object at the intersection point is reflective, Call Recursive Ray Tracer to get reflective color
-			vector3 reflectionColor = recursive_ray_tracing_algorithm(intersect, currDepth + 1);
-			outputColor = floorLocalColor.scalar(local_coef).add(reflectionColor.scalar(reflect_coef));
+			colorToBeMixed = returnedRay; 
 		}
+		// now mix the reflected color
+		
+		outputColor = floorLocalColor.scalar(local_coef).add(colorToBeMixed.scalar(reflect_coef));
 	}
 	return outputColor;
 }
@@ -143,11 +149,9 @@ void drawWall() {
 		}
 	}
 }
-// renders the scene
 
-void render() {
-
-	// render the floor
+// draw the floor - reflective surface
+void drawFloor() {
 	for (int i = -75; i < 75; i++) {
 		for (int j = -75; j < 75; j++) {
 
@@ -159,13 +163,20 @@ void render() {
 
 			// Floor _ use the small rectangles method 
 			glBegin(GL_POLYGON);
-				glVertex3i(i, 0, j);
-				glVertex3i(i + 1, 0, j);
-				glVertex3i(i + 1, 0, j + 1);
-				glVertex3i(i, 0, j + 1);
+			glVertex3i(i, 0, j);
+			glVertex3i(i + 1, 0, j);
+			glVertex3i(i + 1, 0, j + 1);
+			glVertex3i(i, 0, j + 1);
 			glEnd();
 		}
 	}
+}
+
+// renders the scene
+void render() {
+
+	// render the reflective floor
+	drawFloor();
 
 	// render the non reflective wall
 	drawWall();
@@ -202,7 +213,7 @@ void reshape(int w, int h) {
 
 // main program 
 
-void main(int argc, char** argv)
+int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
