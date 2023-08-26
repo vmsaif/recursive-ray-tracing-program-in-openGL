@@ -1,5 +1,7 @@
-#include "vector3.h"
 
+// if not included, include it
+#pragma once
+#include "vector3.h"
 
 
 class plane {
@@ -17,8 +19,6 @@ public:
 	// methods
 
 	vector3 intersect(vector3 v1, vector3 v2);
-
-
 
 	vector3 getP1();
 

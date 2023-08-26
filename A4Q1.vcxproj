@@ -133,7 +133,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="A4Q1.cpp" />
+    <ClCompile Include="MyMain.cpp" />
+    <ClCompile Include="Program1.cpp" />
+    <ClCompile Include="Program2.cpp" />
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="vector3.cpp" />
   </ItemGroup>
