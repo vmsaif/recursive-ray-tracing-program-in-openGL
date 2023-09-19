@@ -1,17 +1,14 @@
 /*
 	Author: Saif Mahmud
-	Student ID: 3433058
 	Date : 4 / 03 / 2023
-	Course: COMP 390
-	TME = 4
-	Program : 2
-	Purpose: Adding a test to the program of recursive ray tracer of my Q1 to check if the intersection point (of the floor) can see the light source or not. If not, mixing the local color with the shadow color.
+
+	Purpose: Adding a test to the program of recursive ray tracer of my Program1 to check if the intersection point (of the floor) can see the light source or not. If not, mixing the local color with the shadow color.
 */
 
 
 #include <iostream>
 #include <math.h>
-#include "gl/glut.h"
+#include <GL/glut.h>
 #include "plane.h"
 
 namespace Program2 {

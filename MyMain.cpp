@@ -1,4 +1,8 @@
-
+/*
+	Author: Saif Mahmud
+	Date : 4 / 02 / 2023
+	Description : To develop a program based on the recursive ray tracing algorithm. The implemented recursive method should cast a ray from the ray source to the scene. The ray may either hit the wall (a non-reflective surface here) or hit the floor (a reflective surface here). If it hits the wall, the method can terminate the recursion and return the local color of the wall. If the ray hits the floor, the method should (recursively) invoke itself with the reflection ray, and calculate and return the mixed color as demonstrated in the original render() routine.
+*/
 
 #include "Program1.cpp"
 #include "Program2.cpp"
