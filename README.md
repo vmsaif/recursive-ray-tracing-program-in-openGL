@@ -53,4 +53,4 @@ The primary goal of this project is to showcase the recursive ray tracing algori
  <br> <br> <br> 
   ### Program 2:
 
- ![Ray Tracing](assets/non_shadow.png "Ray Tracing without shadow")
+ ![Ray Tracing](assets/shadow.png "Ray Tracing without shadow")
