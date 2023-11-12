@@ -29,12 +29,12 @@ Ensure you have Visual Studio installed. If not, download it from [Visual Studio
 This project requires the OpenGL library or `glut.h`. The easiest way to set it up in Visual Studio is as follows:
 
 1. Navigate to the directory where you cloned the project.
-2. Open the `recursive-ray-tracing-program-in-openGL.sln` file in Visual Studio.
+2. Open the `Ray_Tracing.sln` file in Visual Studio.
 3. Click on `Project` in the menu bar.
-4. Select `Manage NuGet Packages`.
+4. Select `Manage NuGet Packages`. (If you don't see it, close the VS window, then resume from step 2.)
 5. Click on the "Browse" tab.
 6. Search for "freeglut".
-7. Select "nupengl.core" (which includes glut.h) and click `Install`.
+7. Select "nupengl.core" (which includes glut.h) and click `Install`. (If already installed, then uninstall then install again).
 
 ## Running the Project
 
@@ -45,3 +45,12 @@ This project requires the OpenGL library or `glut.h`. The easiest way to set it 
 ## Purpose
 
 The primary goal of this project is to showcase the recursive ray tracing algorithm. Rays are cast from the source to the scene, determining if they hit walls (non-reflective surfaces) or floors (reflective surfaces). The algorithm either terminates upon hitting a wall, returning the wall's local color, or recursively invokes itself upon hitting the floor, calculating the mixed color. An additional feature tests intersections to determine if they can see the light source, introducing shadows where necessary.
+
+## Screenshots
+ ### Program 1:
+
+ ![Ray Tracing](assets/non_shadow.png "Ray Tracing without shadow")
+ <br> <br> <br> 
+  ### Program 2:
+
+ ![Ray Tracing](assets/non_shadow.png "Ray Tracing without shadow")

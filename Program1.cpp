@@ -38,8 +38,18 @@ namespace Program1 {
 	static vector3 wallLimit4(25.0, 0.0, 0.0);
 
 	// colors
-	static vector3 grey(0.75, 0.75, 0.75);
-	static vector3 lightRed(0.75, 0.1, 0.1);
+	static vector3 floorColor(0.0, 0.325, 0.612); // Darker Blue
+	static vector3 wallColor(0.686, 0.796, 1.0); // Pastel Blue
+	static vector3 border(0.0, 0.0, 0.0);
+	static GLfloat borderWidth = 1.0;
+
+
+	// background Color
+	static GLclampf red = 0.8;   
+	static GLclampf green = 0.8; 
+	static GLclampf blue = 0.8;  
+	static GLclampf alpha = 1.0; // Fully opaque
+
 
 	// lighting position
 	static vector3 lightPosition(25, 25, 100.0);
@@ -49,12 +59,6 @@ namespace Program1 {
 	static float diffuse_coef = 0.7;
 	static float reflect_coef = 0.4;
 	static float local_coef = 0.6;
-
-	// initialize
-	static void initialize() {
-		// set background color
-		glClearColor(0.5, 0.7, 0.5, 0.0);
-	}
 
 	// calculate local color
 	// local color is intensity * base color
@@ -102,8 +106,8 @@ namespace Program1 {
 		vector3 reflect = incidentRay.reflect(floorNormal);
 
 		//Calculate local color	// the surface color of the local object
-		vector3 floorLocalColor = localColor(intersect, grey, floorNormal);
-		vector3 wallLocalColor = localColor(intersect, lightRed, wallNormal);
+		vector3 floorLocalColor = localColor(intersect, floorColor, floorNormal);
+		vector3 wallLocalColor = localColor(intersect, wallColor, wallNormal);
 
 		vector3 colorToBeMixed = outputColor;
 
@@ -150,13 +154,27 @@ namespace Program1 {
 
 			}
 		}
+
+		// Draw black border around the wall
+		glColor3f(border.x, border.y, border.z); 
+		glLineWidth(borderWidth); // Set line width for the border
+
+		// Draw the border as a line loop on the wall border
+		glBegin(GL_LINE_LOOP);
+		glVertex3i(-25, -1, 0); // Bottom left corner
+		glVertex3i(25, -1, 0);  // Bottom right corner
+		glVertex3i(25, 50, 0);  // Top right corner
+		glVertex3i(-25, 50, 0); // Top left corner
+		glEnd();
 	}
 
 	// draw the floor - reflective surface
 	static void drawFloor() {
-		for (int i = -75; i < 75; i++) {
-			for (int j = -75; j < 75; j++) {
+		float gridSize = 0.5;
+		for (float i = -75.0; i < 75.0; i = i + gridSize) {
+			for (float j = -75.0; j < 75.0; j = j + gridSize) {
 
+				
 				vector3 intersect = vector3(i, 0, j);
 				vector3 color = recursive_ray_tracing_algorithm(intersect, 0);	// local color of the floor
 
@@ -165,10 +183,10 @@ namespace Program1 {
 
 				// Floor _ use the small rectangles method 
 				glBegin(GL_POLYGON);
-				glVertex3i(i, 0, j);
-				glVertex3i(i + 1, 0, j);
-				glVertex3i(i + 1, 0, j + 1);
-				glVertex3i(i, 0, j + 1);
+				glVertex3f(i, 0.0, j);
+				glVertex3f(i + gridSize, 0.0, j);
+				glVertex3f(i + gridSize, 0.0, j + gridSize);
+				glVertex3f(i, 0.0, j + gridSize);
 				glEnd();
 			}
 		}
@@ -211,6 +229,18 @@ namespace Program1 {
 
 	}
 
+	// initialize
+	static void initialize() {
+		// set background color
+		glClearColor(red, green, blue, alpha);
+		// Enable multisampling for anti-aliasing
+		glEnable(GL_LINE_SMOOTH);  //enable line anti-aliasing
+		glEnable(GL_POINT_SMOOTH);
+		glEnable(GL_SMOOTH);
+
+		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);  //set the quality of anti-aliasing
+		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);  //set the quality of anti-aliasing
+	}
 
 
 	// main program 
@@ -218,11 +248,11 @@ namespace Program1 {
 	static int main(int argc, char** argv)
 	{
 		glutInit(&argc, argv);
-		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
 		glutInitWindowSize(500, 500);
 		glutInitWindowPosition(100, 100);
 
-		int windowHandle = glutCreateWindow("TME 4 _ Q1");
+		int windowHandle = glutCreateWindow("Ray Tracing Algorithm");
 		glutSetWindow(windowHandle);
 
 		glutDisplayFunc(display);
